@@ -1,0 +1,16 @@
+<schedule id="test">
+	<round id="0">
+		<select>
+			<SelectRule rule="B C C" />
+		</select>
+		<weaken>
+		
+		</weaken>
+		<rename>
+			<RenameRule old="A" new="C" />
+			<RenameRule old="B" new="AC" />
+			<RenameRule old="C" new="BC" />
+			<RenameRule old="D" new="ABC" />
+		</rename>
+	</round>
+</schedule>

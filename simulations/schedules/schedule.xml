@@ -1,0 +1,128 @@
+<schedule id="test">
+	<round id="0">
+		<select>
+			<SelectRule color="1" rule="B C C" /> 
+			<SelectRule color="2" rule="X X X" />
+			<SelectRule rule="B C C" />
+		</select>
+		<weaken>
+		
+		</weaken>
+		<rename>
+			<RenameRule old="A" new="D" />
+			<RenameRule old="B" new="BD" />
+			<RenameRule old="C" new="CD" />
+			<RenameRule old="D" new="BCD" />
+		</rename>
+		<colorRules>
+			<ColorEdgeRule label='B' color="#FF0000" />
+			<ColorEdgeRule nodeColor="black" label='M M M' color="#FFFF00" />
+		<colorRules \>
+	</round>
+	<round id="1">
+		<select>
+			<SelectRule rule="C C D" />
+			<SelectRule rule="B BCD BCD" />
+		</select>
+		<weaken>
+			<WeakenSelectRule rule="C C D" />
+			<WeakenSelectRule rule="B E E" />
+			<WeakenSelectRule rule="A E F" />
+			<WeakenRenameRule old="A" new="ABCDEF" />
+			<WeakenRenameRule old="B" new="BDEF" />
+			<WeakenRenameRule old="C" new="CDEF" />
+			<WeakenRenameRule old="D" new="DEF" />
+			<WeakenRenameRule old="E" new="EF" />
+			<WeakenRenameRule old="F" new="F" />
+		</weaken>
+		<rename>
+			<RenameRule old="A" new="C" />
+			<RenameRule old="B" new="AC" />
+			<RenameRule old="C" new="CD" />
+			<RenameRule old="D" new="ACD" />
+			<RenameRule old="E" new="BCD" />
+			<RenameRule old="F" new="ABCD" />
+		</rename>
+	</round>
+	<round id="2">
+		<select>
+			<SelectRule rule="B C D" />
+			<SelectRule rule="A D D" />
+			<SelectRule rule="B B ACD" />
+		</select>
+		<weaken>
+			<WeakenSelectRule rule="B C D" />
+			<WeakenSelectRule rule="A D D" />
+			<WeakenSelectRule rule="B B E" />
+			<WeakenRenameRule old="A" new="ACE" />
+			<WeakenRenameRule old="B" new="BCDE" />
+			<WeakenRenameRule old="C" new="CE" />
+			<WeakenRenameRule old="D" new="CDE" />
+			<WeakenRenameRule old="E" new="CE" />
+		</weaken>
+		<rename>
+			<RenameRule old="A" new="B" />
+			<RenameRule old="B" new="E" />
+			<RenameRule old="C" new="BE" />
+			<RenameRule old="D" new="CE" />
+			<RenameRule old="E" new="ABCE" />
+		</rename>
+	</round>
+	<round id="3">
+		<select>
+			<SelectRule rule="C C ABC" />
+			<SelectRule rule="B E E" />
+			<SelectRule rule="A E ABCE" />
+		</select>
+		<weaken>
+			<WeakenSelectRule rule="C C D" />
+			<WeakenSelectRule rule="B E E" />
+			<WeakenSelectRule rule="A E F" />
+			<WeakenRenameRule old="A" new="ABCDEF" />
+			<WeakenRenameRule old="B" new="BDF" />
+			<WeakenRenameRule old="C" new="CDEF" />
+			<WeakenRenameRule old="D" new="DF" />
+			<WeakenRenameRule old="E" new="EF" />
+			<WeakenRenameRule old="F" new="F" />
+		</weaken>
+		<rename>
+			<RenameRule old="A" new="C" />
+			<RenameRule old="B" new="AC" />
+			<RenameRule old="C" new="CD" />
+			<RenameRule old="D" new="ACD" />
+			<RenameRule old="E" new="BCD" />
+			<RenameRule old="F" new="ABCD" />
+		</rename>
+	</round>
+	<round id="4">
+		<select>
+			<SelectRule rule="B B C" />
+			<SelectRule rule="A D D" />
+		</select>
+		<weaken>
+
+		</weaken>
+		<rename>
+			<RenameRule old="A" new="M" />
+			<RenameRule old="B" new="U" />
+			<RenameRule old="C" new="MU" />
+			<RenameRule old="D" new="PU" />
+		</rename>
+	</round>
+	<round id="5">
+		<select>
+			<SelectRule rule="M U U" />
+			<SelectRule rule="P P P" />
+		</select>
+		<weaken>
+
+		</weaken>
+		<rename>
+			<RenameRule old="M" new="M" />
+			<RenameRule old="U" new="U" />
+			<RenameRule old="P" new="P" />
+		</rename>
+	</round>
+</schedule>
+
+
