@@ -1,7 +1,7 @@
 <schedule id="test">
 	<round id="0">
 		<select>
-			<SelectRule rule="B C C" color="0" />
+			<SelectRule rule="B C C" color="white" />
 		</select>
 		<weaken>
 		
@@ -13,13 +13,15 @@
 			<RenameRule old="D" new="BCD" />
 		</rename>
 		<colorRules>
-			<ColorEdgeRule label="B" color="#FF0000" />
+			<ColorEdgeRule label='B' color="#FF0000" />
+			<ColorEdgeRule label='C' color="#00FF00" />
+			<!-- ColorEdgeRule nodeColor="black" label='M M M' color="#FFFF00" /-->
 		</colorRules>
 	</round>
 	<round id="1">
 		<select>
-			<SelectRule rule="C C D" />
-			<SelectRule rule="B BCD BCD" />
+			<SelectRule rule="C C D" color="1"/>
+			<SelectRule rule="B BCD BCD" color="2"/>
 		</select>
 		<weaken>
 			<WeakenSelectRule rule="C C D" />
@@ -40,12 +42,18 @@
 			<RenameRule old="E" new="BCD" />
 			<RenameRule old="F" new="ABCD" />
 		</rename>
+		<colorRules>
+			<ColorEdgeRule label='B' color="#FF0000" />
+			<ColorEdgeRule label='C' color="#00FF00" />
+			<ColorEdgeRule label='D' color="#0000FF" />
+			<!-- ColorEdgeRule nodeColor="black" label='M M M' color="#FFFF00" /-->
+		</colorRules>
 	</round>
 	<round id="2">
 		<select>
-			<SelectRule rule="B C D" />
-			<SelectRule rule="A D D" />
-			<SelectRule rule="B B ACD" />
+			<SelectRule rule="B C D" color="3"/>
+			<SelectRule rule="A D D" color="4"/>
+			<SelectRule rule="B B ACD" color="5"/>
 		</select>
 		<weaken>
 			<WeakenSelectRule rule="B C D" />
@@ -64,12 +72,20 @@
 			<RenameRule old="D" new="CE" />
 			<RenameRule old="E" new="ABCE" />
 		</rename>
+		<colorRules>
+			<ColorEdgeRule label='A' color="#FFFF00" />
+			<ColorEdgeRule label='B' color="#FF0000" />
+			<ColorEdgeRule label='C' color="#00FF00" />
+			<ColorEdgeRule label='D' color="#0000FF" />
+			<ColorEdgeRule label='E' color="#FF00FF" />
+			<!-- ColorEdgeRule nodeColor="black" label='M M M' color="#FFFF00" /-->
+		</colorRules>
 	</round>
 	<round id="3">
 		<select>
-			<SelectRule rule="C C ABC" />
-			<SelectRule rule="B E E" />
-			<SelectRule rule="A E ABCE" />
+			<SelectRule rule="C C ABC" color="1"/>
+			<SelectRule rule="B E E" color="2"/>
+			<SelectRule rule="A E ABCE" color="6"/>
 		</select>
 		<weaken>
 			<WeakenSelectRule rule="C C D" />
@@ -90,6 +106,15 @@
 			<RenameRule old="E" new="BCD" />
 			<RenameRule old="F" new="ABCD" />
 		</rename>
+		<colorRules>
+			<ColorEdgeRule label='A' color="#FFFF00" />
+			<ColorEdgeRule label='B' color="#FF0000" />
+			<ColorEdgeRule label='C' color="#00FF00" />
+			<ColorEdgeRule label='D' color="#0000FF" />
+			<ColorEdgeRule label='E' color="#FF00FF" />
+			<ColorEdgeRule label='F' color="#00FFFF" />
+			<!-- ColorEdgeRule nodeColor="black" label='M M M' color="#FFFF00" /-->
+		</colorRules>
 	</round>
 	<round id="4">
 		<select>
@@ -105,6 +130,15 @@
 			<RenameRule old="C" new="MU" />
 			<RenameRule old="D" new="PU" />
 		</rename>
+		<colorRules>
+			<ColorEdgeRule label='A' color="#FFFF00" />
+			<ColorEdgeRule label='B' color="#FF0000" />
+			<ColorEdgeRule label='C' color="#00FF00" />
+			<ColorEdgeRule label='D' color="#0000FF" />
+			<ColorEdgeRule label='E' color="#FF00FF" />
+			<ColorEdgeRule label='F' color="#00FFFF" />
+			<!-- ColorEdgeRule nodeColor="black" label='M M M' color="#FFFF00" /-->
+		</colorRules>
 	</round>
 	<round id="5">
 		<select>
@@ -119,5 +153,16 @@
 			<RenameRule old="U" new="U" />
 			<RenameRule old="P" new="P" />
 		</rename>
+		<colorRules>
+			<ColorEdgeRule label='M' color="#FF0000" />
+			<ColorEdgeRule label='U' color="#000000" />
+			<ColorEdgeRule label='P' color="#00FF00" />
+			<ColorEdgeRule label='D' color="#0000FF" />
+			<ColorEdgeRule label='E' color="#FF00FF" />
+			<ColorEdgeRule label='F' color="#00FFFF" />
+			<!-- ColorEdgeRule nodeColor="black" label='M M M' color="#FFFF00" /-->
+		</colorRules>
 	</round>
 </schedule>
+
+

@@ -37,7 +37,7 @@ simple Node
 		xml shedule = default(xml("<root/>"));
 		
 		bool verbose = default(true); // If True the node will generate additional output
-        string text_pos = default("t"); // If Verbose == true : parameter defines where the additional info is displayed. Possible values: t(top), r(right), l(left)
+        string text_pos = default("t"); // If verbose == true : parameter defines where the additional info is displayed. Possible values: t(top), r(right), l(left)
         @display("i=misc/node2,$colour;t=,$text_pos");
     gates:
         inout con[]; // inout connection to genecrically connect to other nodes
@@ -51,6 +51,27 @@ simple Black_node extends Node //still uses the implementation of Node
 }
 
 simple White_node extends Node //still uses the implementation of Node
+{
+    colour = "white";
+    start_as_active = true;
+}
+
+simple Colour_dependent_node extends Node
+{
+    @class(Colour_dependent_node);
+    colour = default("1");
+    xml colourTable = default(xml("<colorTable></colorTable>"));
+    bool WarnColorNotFund = default(true); //if true a warning is thrown if par colour does not match any colour in the selection rules specified in par shedule; if false node uses first rule
+    @display("i=misc/node2;t=,$text_pos");
+}
+
+simple Colour_dependent_black_node extends Colour_dependent_node //still uses the implementation of Node
+{
+    colour = "black";
+    start_as_active = false;
+}
+
+simple Colour_dependent_white_node extends Colour_dependent_node //still uses the implementation of Node
 {
     colour = "white";
     start_as_active = true;

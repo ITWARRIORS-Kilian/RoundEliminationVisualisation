@@ -41,6 +41,8 @@ class RoundModule;
 class Node : public cSimpleModule
 {
   private:
+
+  protected:
     int round; //stores the current round the module is in
     state cur_state; //stores in which sub-step the module is currently in
     bool active; // true if module is currently active(true) or passive(false)
@@ -49,22 +51,21 @@ class Node : public cSimpleModule
     Rule labels; // stores the labels of all incident edges
     int nrGates; //number of incident edges
     bool verbose; // if true additional informations are displayed in the simulation
-  protected:
-    virtual void initialize(int stage);
-    virtual int numInitStages() const{
+
+    virtual void initialize(int stage) override;
+    virtual int numInitStages() const override{
         return 2;
     }
-    virtual void handleMessage(cMessage *msg);
+    virtual void handleMessage(cMessage *msg) override;
 
     /** \brief Send currently stored labels to the corresponding gates
      *
      */
     void send_update();
   public:
-    void step_select(const std::vector<Rule>& rules_to_check);
-    // void step_weaken(int round);
-    void step_rename(std::map<char,std::string>& rename_rule);
-    void step_switch();
+    virtual void step_select(const std::vector<Rule>& rules_to_check);
+    virtual void step_rename(std::map<char,std::string>& rename_rule);
+    virtual void step_switch();
 };
 
 #endif

@@ -21,39 +21,72 @@
 // Email: kilian.erben@gmail.com
 
 #include "label_channel.h"
+#include "../modules/RoundModule.h"
 #include "../messages/labelMessage_m.h"
 
 Define_Channel(Label_channel);
 
-void Label_channel::initialize(){
-    verbose = par("verbose").boolValue();
-    WATCH(verbose);
-    for(int i=0;i<20;i++){
-        label[i]=0;
+void Label_channel::initialize(int stage){
+    switch (stage) {
+        case 0:
+            verbose = par("verbose").boolValue();
+            WATCH(verbose);
+            for(int i=0;i<20;i++){
+                label[i]=0;
+            }
+            snprintf(label,20,"Unlabeled");
+            snprintf(colour_label,20,"#0000FF");
+            old_labels.emplace_back(std::string(label));
+            WATCH(label);
+
+            color_edge = par("color_edge").boolValue();
+            WATCH(color_edge);
+            if(color_edge){
+                //load schedule
+                round = 0;
+                // Parse XML File
+                cXMLElement* schedule = par("schedule").xmlValue();
+                xml_rounds = schedule->getChildrenByTagName("Round");
+                num_rounds = xml_rounds.size();
+                WATCH(num_rounds);
+                cur_color = "#000000";
+                WATCH(cur_color);
+                // if(num_rounds == 0) EV << "XML Schedule does not contain any rounds" << std::endl;
+            }
+
+            delay = par("delay");
+            datarate = par("datarate");
+            ber = par("ber");
+            per = par("per");
+
+            if (delay < SIMTIME_ZERO)
+                throw cRuntimeError(this, "Negative delay %s", SIMTIME_STR(delay));
+            if (datarate < 0)
+                throw cRuntimeError(this, "Negative datarate %g", datarate);
+            if (ber < 0 || ber > 1)
+                throw cRuntimeError(this, "Wrong bit error rate %g", ber);
+            if (per < 0 || per > 1)
+                throw cRuntimeError(this, "Wrong packet error rate %g", per);
+
+            setFlag(FL_ISDISABLED, par("disabled"));
+            setFlag(FL_DELAY_NONZERO, delay != SIMTIME_ZERO);
+            setFlag(FL_DATARATE_NONZERO, datarate != 0);
+            setFlag(FL_BER_NONZERO, ber != 0);
+            setFlag(FL_PER_NONZERO, per != 0);
+        break;
+        case 1:
+            //register to clock
+            if(color_edge){
+                RoundModule* clock = check_and_cast<RoundModule*>(getParentModule()->getModuleByPath(par("clock_module").stringValue()));
+                if (clock == nullptr) throw cRuntimeError("Clock module not found! Provided Path: %s",par("clock_module").stringValue());
+                if (!clock->registerToClock(this)) throw cRuntimeError("Unable to register to clock");
+            }
+        break;
+        default:
+
+        break;
     }
-    snprintf(label,20,"Unlabeled");
-    old_labels.emplace_back(std::string(label));
-    WATCH(label);
 
-    delay = par("delay");
-    datarate = par("datarate");
-    ber = par("ber");
-    per = par("per");
-
-    if (delay < SIMTIME_ZERO)
-        throw cRuntimeError(this, "Negative delay %s", SIMTIME_STR(delay));
-    if (datarate < 0)
-        throw cRuntimeError(this, "Negative datarate %g", datarate);
-    if (ber < 0 || ber > 1)
-        throw cRuntimeError(this, "Wrong bit error rate %g", ber);
-    if (per < 0 || per > 1)
-        throw cRuntimeError(this, "Wrong packet error rate %g", per);
-
-    setFlag(FL_ISDISABLED, par("disabled"));
-    setFlag(FL_DELAY_NONZERO, delay != SIMTIME_ZERO);
-    setFlag(FL_DATARATE_NONZERO, datarate != 0);
-    setFlag(FL_BER_NONZERO, ber != 0);
-    setFlag(FL_PER_NONZERO, per != 0);
 }
 
 //bool Label_channel::isTransmissionChannel() const{
@@ -87,8 +120,11 @@ void Label_channel::processMessage(cMessage *msg, simtime_t t, result_t& result)
                 LabelMessage* lmsg = check_and_cast<LabelMessage*>(msg);
                 strncpy(label,lmsg->getLabel(),20);
                 old_labels.emplace_back(std::string(label));
+                if(colorRules.find(std::string(label))!=colorRules.end()){
+                    cur_color=colorRules[std::string(label)];
+                }
                 if(verbose) EV << "Received label Message" << label << "\n";
-                snprintf(colour,20,"#FF6500");
+                switch_label_colour();
         }
 
         // propagation delay modeling
@@ -103,6 +139,25 @@ void Label_channel::refreshDisplay() const
 //        snprintf(buf,20,"%s",label);
         snprintf(buf,20,"%s",(*(old_labels.end()-1)).c_str());
         getDisplayString().setTagArg("t", 0, buf);
-        getDisplayString().setTagArg("t", 2, colour);
+        getDisplayString().setTagArg("t", 2, colour_label);
+        snprintf(buf, 20,cur_color.c_str());
+        getDisplayString().setTagArg("ls", 0, buf);
+
+    }
+}
+
+void Label_channel::update_coloring_rules(int Round){
+    Enter_Method_Silent("Update coloring rules!");
+    round = Round;
+    cXMLElement* xml_cur_round = xml_rounds[round];
+    cXMLElement* xml_cur_colorRules = xml_cur_round->getFirstChildWithTag("colorRules");
+    if(xml_cur_colorRules == nullptr) throw cRuntimeError("Found no colorRules Tag in round %d",round);
+    cXMLElementList xml_colorEdgeRules = xml_cur_colorRules->getChildrenByTagName("ColorEdgeRule");
+    for(cXMLElement* xml_colorEdgeRule:xml_colorEdgeRules){
+        if(xml_colorEdgeRule->getAttribute("label") == nullptr) throw cRuntimeError("Found ColorEdgeRule without attribute label");
+        std::string key =  xml_colorEdgeRule->getAttribute("label");
+        if(xml_colorEdgeRule->getAttribute("color") == nullptr) throw cRuntimeError("Found ColorEdgeRule without attribute color");
+        std::string colortokey = xml_colorEdgeRule->getAttribute("color");
+        colorRules[key]=colortokey;
     }
 }

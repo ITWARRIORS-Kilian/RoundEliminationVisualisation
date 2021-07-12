@@ -26,6 +26,7 @@
 #include <omnetpp.h>
 #include <iostream>
 #include <vector>
+#include <map>
 
 using namespace omnetpp;
 
@@ -38,7 +39,10 @@ class Label_channel : public cDatarateChannel
 //    bool isTransmissionChannel() const;
 //    simtime_t getTransmissionFinishTime() const;
 	void processMessage(cMessage *msg, simtime_t t, result_t& result) override;
-	virtual void initialize() override;
+	virtual void initialize(int stage) override;
+	virtual int numInitStages() const override{
+        return 2;
+    }
 	virtual void refreshDisplay() const override;
   private:
 	simtime_t delay; // propagation delay
@@ -47,10 +51,20 @@ class Label_channel : public cDatarateChannel
     double per;      // packet error rate
     // int show_back;   //!< defines how many rounds later the message
 
-    char colour[10];
+    char colour_label[10];
+    bool label_blue;
 	char label[20]; //Contains label
 	std::vector<std::string> old_labels;
 	bool verbose;
+
+	bool color_edge;
+
+	int round;
+	int num_rounds;
+	cXMLElementList xml_rounds;
+	std::map<std::string,std::string> colorRules;
+	std::string cur_color;
+
 
 	enum {
       FL_ISDISABLED = 1 << 10,
@@ -62,6 +76,17 @@ class Label_channel : public cDatarateChannel
 
 	simtime_t txFinishTime;
 
+	void switch_label_colour(){
+	    if(label_blue){
+	        snprintf(colour_label,20,"#0000FF");
+	        label_blue = false;
+	    }
+	    else{
+	        snprintf(colour_label,20,"#FF6500");
+            label_blue = true;
+	    }
+	}
+
   public:
        /** \brief add new label to list and update current label
        *  This function should be called from the inverse transmission channel to update the labels of both channels
@@ -71,8 +96,18 @@ class Label_channel : public cDatarateChannel
       void add_new_label(std::string new_label){
           old_labels.push_back(new_label);
           snprintf(label,20,"%s",new_label.c_str());
-          snprintf(colour,20,"#0000FF");
+          switch_label_colour();
+          if(colorRules.find(new_label)!=colorRules.end()){
+              cur_color=colorRules[new_label];
+          }
       }
+
+      /** \brief update coloring rules for this edge ==> should be called by clock module
+      *
+      * \param int round
+      * \return void
+      */
+      void update_coloring_rules(int Round);
 
 
 };

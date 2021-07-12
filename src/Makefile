@@ -32,6 +32,7 @@ O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 # Object files for local .cc, .msg and .sm files
 OBJS = \
     $O/channels/label_channel.o \
+    $O/modules/ColourDependentNode.o \
     $O/modules/Label.o \
     $O/modules/node.o \
     $O/modules/RoundModule.o \

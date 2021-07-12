@@ -1,0 +1,13 @@
+<!-- This file contains entries that map an id to an specific color, defined as a rgb hex value -->
+<colorTable>
+	<colorRule id="0" color="#A31129" />
+	<colorRule id="1" color="#2049A7" />
+	<colorRule id="2" color="#4F5D2F" />
+	<colorRule id="3" color="#A1CCA5" />
+	<colorRule id="4" color="#EEB4B3" />
+	<colorRule id="5" color="#FAA275" />
+	<colorRule id="6" color="#C3D350" />
+	<colorRule id="7" color="#87F1FF" />
+	<colorRule id="white" color="#FFFFFF" />
+	<colorRule id="black" color="#000000" />
+</colorTable>

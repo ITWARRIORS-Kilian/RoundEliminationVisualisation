@@ -29,6 +29,7 @@
 #include <vector>
 #include "utils.h"
 #include "Rule.h"
+#include "../channels/label_channel.h"
 
 using namespace omnetpp;
 
@@ -46,6 +47,8 @@ class RoundModule : public cSimpleModule
     state curState;
     std::vector<Node*> registeredNodes;
     int nrNodes;
+    std::vector<Label_channel*> registeredEdges;
+    int nrEdges;
     cXMLElement* schedule;
 
     cXMLElementList xml_rounds;
@@ -54,6 +57,11 @@ class RoundModule : public cSimpleModule
     // std::set<char,std::string> cur_Rename_Rules;
 
     bool verbose;
+    void update_color_edges(){
+        for(Label_channel* edge:registeredEdges){
+            edge->update_coloring_rules(round);
+        }
+    }
 
 
 
@@ -81,6 +89,7 @@ class RoundModule : public cSimpleModule
 
   public:
     bool registerToClock(Node* n);
+    bool registerToClock(Label_channel* edge);
 };
 
 #endif

@@ -40,6 +40,8 @@ class Rule
         Rule();
 
         Rule(std::string rule_string);
+
+        Rule(std::string rule_string, std::string Colour);
         /** Default destructor */
         virtual ~Rule();
         /** \brief add new label to rule
@@ -148,6 +150,19 @@ class Rule
              }
          }
 
+         /** \brief returns true if rule is coloured and if so stores the colour in colour_out param
+         *
+         * \param std::string& colour_out //if rule is coloured the result is stored in this param
+         * \return true if coloured else false
+         */
+         bool get_Colour(std::string& colour_out) const{
+             if(is_coloured){
+                 colour_out = colour;
+                 return true;
+             }
+             return false;
+         }
+
          friend std::ostream& operator<<(std::ostream& os, const Rule& rule);
 
     protected:
@@ -156,6 +171,8 @@ class Rule
         //void permute(std::vector<std::pair<Label;std::set<int>>& out, std::vector<Label> rule);
         int size;
         std::vector<Label> rule;
+        bool is_coloured;
+        std::string colour;
 };
 
 std::ostream& operator<<(std::ostream& os, const Rule& rule);

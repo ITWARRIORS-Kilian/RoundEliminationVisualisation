@@ -39,6 +39,8 @@ void RoundModule::initialize()
     verbose = par("verbose").boolValue();
     nrNodes = 0;
     WATCH(nrNodes);
+    nrEdges = 0;
+    WATCH(nrEdges);
     schedule = par("schedule").xmlValue();//->getFirstChildWithTag("schedule");
     // WATCH(schedule); Zeigt nur Pointer an
 
@@ -58,6 +60,7 @@ void RoundModule::handleMessage(cMessage *msg)
         EV << "Round:"<< round << " Step:"<< curState << std::endl;
         switch(curState){
         case state::SELECT:
+            update_color_edges();
             select();
         break;
         case state::WEAKEN:
@@ -90,6 +93,13 @@ bool RoundModule::registerToClock(Node* n){
     return true;
 }
 
+bool RoundModule::registerToClock(Label_channel* edge){
+    Enter_Method_Silent();
+    registeredEdges.push_back(edge);
+    nrEdges++;
+    return true;
+}
+
 void RoundModule::select(){
     // Load current rules
     cXMLElement* xml_cur_round = xml_rounds[round];
@@ -102,7 +112,13 @@ void RoundModule::select(){
     for(cXMLElement* xml_SelectRule:xml_SelectRules){
         if(xml_SelectRule->getAttribute("rule") == nullptr) error("SelectRule has no attribute rule");
         std::string rule_string = xml_SelectRule->getAttribute("rule");
-        cur_Select_Rules.emplace_back(rule_string);
+        if(xml_SelectRule->getAttribute("color") != nullptr){
+                std::string colour = xml_SelectRule->getAttribute("color");
+                cur_Select_Rules.emplace_back(rule_string,colour);
+        }
+        else{
+            cur_Select_Rules.emplace_back(rule_string);
+        }
     }
     if(verbose) EV << "Loaded " << cur_Select_Rules.size() << " SelectRules\n";
     // Perform Selection Step on all registered nodes

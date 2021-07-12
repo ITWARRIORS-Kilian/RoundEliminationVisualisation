@@ -29,6 +29,8 @@
 Rule::Rule()
 {
     size = 0;
+    is_coloured = false;
+    colour = "Not a colour ==> This rule has no color";
 }
 
 Rule::Rule(std::string rule_string){
@@ -39,6 +41,20 @@ Rule::Rule(std::string rule_string){
         size++;
         rule.emplace_back(subs);
     }
+    is_coloured = false;
+    colour = "Not a colour ==> This rule has no color";
+}
+
+Rule::Rule(std::string rule_string, std::string Colour){
+    size = 0;
+    std::istringstream rule_stream(rule_string);
+    std::string subs;
+    while(std::getline(rule_stream, subs,' ')){
+        size++;
+        rule.emplace_back(subs);
+    }
+    is_coloured = true;
+    colour = Colour;
 }
 
 Rule::~Rule()

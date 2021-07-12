@@ -27,6 +27,7 @@
 #include "../channels/label_channel.h"
 
 #define PRINTSELECT
+#define ENTER_METHOD_SILENT_NODE
 
 
 Define_Module(Node);
@@ -89,12 +90,11 @@ void Node::handleMessage(cMessage *msg)
 }
 
 void Node::step_select(const std::vector<Rule>& rules_to_check){
-//    if(verbose){
+    #if !defined( ENTER_METHOD_SILENT_NODE)
         Enter_Method("SELECT");
-//    }
-//    else{
-//        Enter_Method_Silent("SELECT");
-//    }
+    #else
+        Enter_Method_Silent("SELECT");
+    #endif
     if(active){
         // This node is currently active ==> Perform selection step
         if(round==0){
@@ -127,7 +127,11 @@ void Node::step_select(const std::vector<Rule>& rules_to_check){
 //}
 
 void Node::step_rename(std::map<char,std::string>& rename_rule){
-    Enter_Method("Rename");
+#if !defined( ENTER_METHOD_SILENT_NODE)
+        Enter_Method("RENAME");
+    #else
+        Enter_Method_Silent("RENAME");
+    #endif
     if(active){
         labels.rename(rename_rule);
         send_update();
