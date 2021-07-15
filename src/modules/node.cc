@@ -126,7 +126,7 @@ void Node::step_select(const std::vector<Rule>& rules_to_check){
 //
 //}
 
-void Node::step_rename(std::map<char,std::string>& rename_rule){
+void Node::step_rename(std::map<char,std::string>& rename_rule, bool sendUpdate){
 #if !defined( ENTER_METHOD_SILENT_NODE)
         Enter_Method("RENAME");
     #else
@@ -134,7 +134,7 @@ void Node::step_rename(std::map<char,std::string>& rename_rule){
     #endif
     if(active){
         labels.rename(rename_rule);
-        send_update();
+        if(sendUpdate) send_update();
     }
 }
 

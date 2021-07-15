@@ -64,7 +64,7 @@ class Node : public cSimpleModule
     void send_update();
   public:
     virtual void step_select(const std::vector<Rule>& rules_to_check);
-    virtual void step_rename(std::map<char,std::string>& rename_rule);
+    virtual void step_rename(std::map<char,std::string>& rename_rule, bool sendUpdate = true);
     virtual void step_switch();
 };
 

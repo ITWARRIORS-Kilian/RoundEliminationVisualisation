@@ -34,7 +34,7 @@ void RoundModule::initialize()
     tact = par("tact").intValue();
     round = 0;
     WATCH(round);
-    curState = state::SELECT;
+    curState = state::SWITCH;
     WATCH(curState);
     verbose = par("verbose").boolValue();
     nrNodes = 0;
@@ -57,6 +57,7 @@ void RoundModule::initialize()
 void RoundModule::handleMessage(cMessage *msg)
 {
     if(msg->isSelfMessage()){
+        curState = state_step_forward(curState);
         EV << "Round:"<< round << " Step:"<< curState << std::endl;
         switch(curState){
         case state::SELECT:
@@ -78,7 +79,7 @@ void RoundModule::handleMessage(cMessage *msg)
         default:
             error("Clock is in invalid State!");
         }
-        curState = state_step_forward(curState);
+
         // if(curState == state::SWITCH) round++;
         if(round < num_rounds){
             scheduleAt(simTime()+tact, msg);
@@ -193,7 +194,7 @@ void RoundModule::weaken(){
     if(verbose) EV << "Loaded " << cur_Select_Rules.size() << " WeakenSelectRules\n";
 
     for(Node* node:registeredNodes){
-        node->step_rename(cur_Rename_Rules);
+        node->step_rename(cur_Rename_Rules,false);
         node->step_select(cur_Select_Rules);
     }
 

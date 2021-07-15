@@ -41,6 +41,8 @@ void Label_channel::initialize(int stage){
 
             color_edge = par("color_edge").boolValue();
             WATCH(color_edge);
+            label_blue = true;
+            WATCH(label_blue);
             if(color_edge){
                 //load schedule
                 round = 0;
